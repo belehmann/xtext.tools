@@ -36,9 +36,15 @@ class NodeModelOutlineLabelProvider extends DeclarativeLabelProvider {
 //	def String text(ICompositeNode node) {
 //		"composite"
 //	}
-	
+
 	def StyledString text(HiddenLeafNode hiddenLeafNode) {
-		new StyledString(hiddenLeafNode.grammarElement.text, [foreground = getHiddenLeafColor])
+		val offset = hiddenLeafNode.offset
+		val length = hiddenLeafNode.length
+		val hidden = hiddenLeafNode.rootNode.text.substring(offset, offset + length).replace("\n", "\\n").replace("\t",
+			"\\t")
+
+		new StyledString(hiddenLeafNode.grammarElement.text + " : \"" + hidden +
+			"\"", [foreground = getHiddenLeafColor])
 	}
 	
 	def private getHiddenLeafColor() {
